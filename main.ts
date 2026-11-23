@@ -1,6 +1,7 @@
-// main.ts — "The World Today", Monday 23 November 2026.
+// main.ts — "The World Today", Monday 23 November 2026 (v2: 44 stories).
 // Copies the pre-rendered front page (entry.png) to the output directory
-// make.fun expects. Node 22, standard library only, no network.
+// make.fun expects. Node 22, standard library only, no network, no input
+// beyond the repository itself, so both runs write the same bytes.
 import { copyFileSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,7 +21,8 @@ const pngMagic = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 if (!head.equals(pngMagic)) {
   throw new Error("entry.png is not a PNG file");
 }
-// The competition caps the image at 1 MiB; refuse to hand over anything larger.
+// The competition caps the image at 1 MiB and at 1024 by 1024 pixels;
+// refuse to hand over anything larger. entry.png here is 1024x1024.
 const MAX_BYTES = 1048576;
 const size = statSync(dst).size;
 if (size > MAX_BYTES) {
